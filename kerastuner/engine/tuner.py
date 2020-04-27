@@ -162,7 +162,7 @@ class Tuner(base_tuner.BaseTuner):
         best_epoch = trial.best_step
         with hm_module.maybe_distribute(self.distribution_strategy):
             model.load_weights(self._get_checkpoint_fname(
-                trial.trial_id, best_epoch + 1))
+                trial.trial_id, 0))
         return model
 
     def on_epoch_begin(self, trial, model, epoch, logs=None):
