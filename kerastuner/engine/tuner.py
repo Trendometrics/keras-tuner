@@ -149,10 +149,10 @@ class Tuner(base_tuner.BaseTuner):
 
     def save_model(self, trial_id, model, step=0):
         epoch = step
-        self._checkpoint_model(model, trial_id, epoch)
-        if epoch > self._save_n_checkpoints:
-            self._delete_checkpoint(
-                trial_id, epoch - self._save_n_checkpoints)
+        self._checkpoint_model(model, trial_id, 0)
+        # if epoch > self._save_n_checkpoints:
+        #     self._delete_checkpoint(
+        #         trial_id, epoch - self._save_n_checkpoints)
 
     def load_model(self, trial):
         model = self.hypermodel.build(trial.hyperparameters)
