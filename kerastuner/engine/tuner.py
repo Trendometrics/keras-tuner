@@ -113,7 +113,7 @@ class Tuner(base_tuner.BaseTuner):
                 self.distribution_strategy.extended.should_checkpoint)
 
         # Save only the last N checkpoints.
-        self._save_n_checkpoints = 1
+        self._save_n_checkpoints = 10
 
     def run_trial(self, trial, *fit_args, **fit_kwargs):
         """Evaluates a set of hyperparameter values.
@@ -162,7 +162,7 @@ class Tuner(base_tuner.BaseTuner):
         best_epoch = trial.best_step
         with hm_module.maybe_distribute(self.distribution_strategy):
             model.load_weights(self._get_checkpoint_fname(
-                trial.trial_id, best_epoch))
+                trial.trial_id, best_epoch + 1))
         return model
 
     def on_epoch_begin(self, trial, model, epoch, logs=None):
