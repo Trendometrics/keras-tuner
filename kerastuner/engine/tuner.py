@@ -210,7 +210,7 @@ class Tuner(base_tuner.BaseTuner):
             logs: Dict. Metrics for this epoch. This should include
               the value of the objective for this epoch.
         """
-        self.save_model(trial.trial_id, model, step=epoch)
+        self.save_model(trial.trial_id, model, step=epoch+1)
         # Report intermediate metrics to the `Oracle`.
         status = self.oracle.update_trial(
             trial.trial_id, metrics=logs, step=epoch)
