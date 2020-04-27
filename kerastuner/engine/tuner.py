@@ -113,7 +113,7 @@ class Tuner(base_tuner.BaseTuner):
                 self.distribution_strategy.extended.should_checkpoint)
 
         # Save only the last N checkpoints.
-        self._save_n_checkpoints = 10
+        self._save_n_checkpoints = 1
 
     def run_trial(self, trial, *fit_args, **fit_kwargs):
         """Evaluates a set of hyperparameter values.
