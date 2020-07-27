@@ -17,6 +17,29 @@ from packaging.version import parse
 import tensorflow as tf
 
 
+# Check if we are in a ipython/colab environement
+try:
+    class_name = get_ipython().__class__.__name__
+    if "Terminal" in class_name:
+        IS_NOTEBOOK = False
+    else:
+        IS_NOTEBOOK = True
+
+except NameError:
+    IS_NOTEBOOK = False
+
+
+if IS_NOTEBOOK:
+    from IPython import display
+
+
+def try_clear():
+    if IS_NOTEBOOK:
+        display.clear_output()
+    else:
+        print()
+
+
 def create_directory(path, remove_existing=False):
     # Create the directory if it doesn't exist.
     if not tf.io.gfile.exists(path):
@@ -32,11 +55,10 @@ def create_directory(path, remove_existing=False):
 def check_tf_version():
     if parse(tf.__version__) < parse('2.0.0'):
         raise ImportError(
-            f'The Tensorflow package version needs to be at least v2.0.0 \n'
-            f'for Keras Tuner to run. Currently, your TensorFlow version is \n'
-            f'v{tf.__version__}. Please upgrade with \n'
-            f'`$ pip install --upgrade tensorflow` -> GPU version \n'
-            f'or \n'
-            f'`$ pip install --upgrade tensorflow-cpu` -> CPU version. \n'
-            f'You can use `pip freeze` to check afterwards that everything is ok.'
+            'The Tensorflow package version needs to be at least 2.0.0 \n'
+            'for AutoKeras to run. Currently, your TensorFlow version is \n'
+            '{version}. Please upgrade with \n'
+            '`$ pip install --upgrade tensorflow`. \n'
+            'You can use `pip freeze` to check afterwards that everything is '
+            'ok.'.format(version=tf.__version__)
         )

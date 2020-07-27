@@ -24,7 +24,6 @@ import traceback
 import numpy as np
 from tensorflow import keras
 
-from ..abstractions import display
 from .. import config as config_module
 
 
@@ -107,8 +106,7 @@ class KerasHyperModel(HyperModel):
                 if config_module.DEBUG:
                     traceback.print_exc()
 
-                display.warning('Invalid model %s/%s' %
-                                (i, self._max_fail_streak))
+                print('Invalid model %s/%s' % (i, self._max_fail_streak))
 
                 if i == self._max_fail_streak:
                     raise RuntimeError(
@@ -124,8 +122,7 @@ class KerasHyperModel(HyperModel):
             # Check model size.
             size = maybe_compute_model_size(model)
             if self.max_model_size and size > self.max_model_size:
-                display.warning(
-                    'Oversized model: %s parameters -- skipping' % (size))
+                print('Oversized model: %s parameters -- skipping' % (size))
                 if i == self._max_fail_streak:
                     raise RuntimeError(
                         'Too many consecutive oversized models.')
@@ -143,10 +140,22 @@ class KerasHyperModel(HyperModel):
                     'metrics': model.metrics,
                 }
                 if self.loss:
+                    if model.compiled_loss:
+                        print('The hypermodel {} already compiled loss;'
+                              'but is overriden by loss passed by Tuner.'
+                              .format(self.hypermodel))
                     compile_kwargs['loss'] = self.loss
                 if self.optimizer:
+                    if model.optimizer:
+                        print('The hypermodel {} already compiled optimizer;'
+                              'but is overriden by optimizer passed by Tuner.'
+                              .format(self.hypermodel))
                     compile_kwargs['optimizer'] = self.optimizer
                 if self.metrics:
+                    if model.compiled_metrics:
+                        print('The hypermodel {} already compiled metrics;'
+                              'but is overriden by metrics passed by Tuner.'
+                              .format(self.hypermodel))
                     compile_kwargs['metrics'] = self.metrics
                 model.compile(**compile_kwargs)
             return model
